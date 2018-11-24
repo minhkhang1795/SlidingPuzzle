@@ -67,6 +67,14 @@ describe("Solver", function () {
   });
 
   it("solves 15-puzzle #1 with IDAStar", function () {
+    board = new Board([[4, 6, 3, 0], [1, 2, 7, 12], [8, 5, 9, 14], [10, 11, 13, 15]]);
+    solver = new Solver(board);
+    expect(solver.isSolvable()).toEqual(true);
+    solver.solve();
+    expect(solver.minMoves).toEqual(43);
+  });
+
+  it("solves 15-puzzle #2 with IDAStar", function () {
     board = new Board([[6, 8, 0, 4], [13, 9, 10, 14], [15, 2, 12, 5], [1, 3, 7, 11]]);
     solver = new Solver(board);
     expect(solver.isSolvable()).toEqual(true);
@@ -74,7 +82,7 @@ describe("Solver", function () {
     expect(solver.minMoves).toEqual(50);
   });
 
-  it("solves 15-puzzle #2 with IDAStar", function () {
+  it("solves 15-puzzle #3 with IDAStar", function () {
     board = new Board([[2, 7, 4, 3], [1, 12, 8, 6], [0, 14, 15, 9], [13, 5, 11, 10]]);
     solver = new Solver(board);
     expect(solver.isSolvable()).toEqual(true);
@@ -82,7 +90,7 @@ describe("Solver", function () {
     expect(solver.minMoves).toEqual(40);
   });
 
-  it("solves 15-puzzle #3 with IDAStar", function () {
+  it("solves 15-puzzle #4 with IDAStar", function () {
     board = new Board([[2, 3, 1, 9], [5, 4, 7, 11], [10, 0, 14, 15], [12, 8, 6, 13]]);
     solver = new Solver(board);
     expect(solver.isSolvable()).toEqual(true);
