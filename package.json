@@ -1,0 +1,13 @@
+{
+  "name": "slidingpuzzle",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+  },
+  "author": "Minh-Khang Vu",
+  "license": "ISC",
+  "devDependencies": {
+    "jasmine": "^3.3.0"
+  }
+}
