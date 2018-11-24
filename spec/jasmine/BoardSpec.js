@@ -1,5 +1,5 @@
-describe("AppTest", function () {
-  let Board = require('../../js/Board.js');
+describe("Board", function () {
+  let Board = require('../../js/Board');
 
   beforeEach(function () {
     board = new Board([[1, 2, 3], [4, 5, 6], [7, 8, 0]]);

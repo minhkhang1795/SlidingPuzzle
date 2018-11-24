@@ -28,10 +28,11 @@ class Board {
     if (this._tiles) {
       for (let tile of this._tiles) {
         for (let cell of tile) {
-          console.log(cell + "\t");
+          process.stdout.write(cell + "\t");
         }
         console.log("\n");
       }
+      console.log("====".repeat(this._n - 1) + "=");
     } else {
       console.log("Invalid board!");
     }
@@ -50,13 +51,16 @@ class Board {
   isSolvable() {
     let refs = [];
     let numInv = 0;
-    let posFromBottom = 0; // of the empty cell a.k.a 0
+    let posFromBottom = 0; // position from bottom of the empty cell (a.k.a 0)
 
     for (let i = 0; i < this._n; i++) {
       let tile = this._tiles[i];
       for (let value of tile) {
         if (value !== 0) {
-          refs[value - 1] = true;
+          if (refs[value - 1]) // Duplicate check
+            return false;
+          else
+            refs[value - 1] = true;
           for (let k = 0; k < value - 1; k++) {
             if (!refs[k]) {
               numInv++;
@@ -68,6 +72,8 @@ class Board {
       }
     }
 
+    if (refs.length !== this._n * this._n - 1) // Check if board uses a different number
+      return false;
     if (this._n % 2 !== 0) { // Odd board
       return numInv % 2 === 0;
     } else { // Even board
@@ -84,7 +90,7 @@ class Board {
           continue;
         value -= 1;
         let h = Math.abs(j - value % this._n);
-        let v = Math.abs(i - value / this._n);
+        let v = Math.abs(i - Math.floor(value / this._n));
         manhattan += h + v;
       }
     }
@@ -110,22 +116,22 @@ class Board {
 
     let board = this._clone();
     if (board._swap(board._tiles, i0, j0, i0 + 1, j0)) {
-      boards.add(board);
+      boards.push(board);
     }
 
     board = this._clone();
     if (board._swap(board._tiles, i0, j0, i0 - 1, j0)) {
-      boards.add(board);
+      boards.push(board);
     }
 
     board = this._clone();
     if (board._swap(board._tiles, i0, j0, i0, j0 + 1)) {
-      boards.add(board);
+      boards.push(board);
     }
 
     board = this._clone();
     if (board._swap(board._tiles, i0, j0, i0, j0 - 1)) {
-      boards.add(board);
+      boards.push(board);
     }
     return boards;
   }
@@ -144,6 +150,7 @@ class Board {
   _clone() {
     let r = [];
     for (let i = 0; i < this._n; i++) {
+      r[i] = [];
       for (let j = 0; j < this._n; j++) {
         r[i][j] = this._tiles[i][j];
       }

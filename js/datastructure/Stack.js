@@ -1,22 +1,27 @@
 class Stack {
   constructor() {
     this._stack = [];
+    this._n = 0;
   }
 
   size() {
-    return this._stack.size();
+    return this._n;
   }
 
   isEmpty() {
-    return this._stack.size() === 0;
+    return this.size() === 0;
   }
 
   peek() {
-    return this._stack(this.size() - 1);
+    if (this.isEmpty()) {
+      return undefined;
+    }
+    return this._stack[this.size() - 1];
   }
 
   push(element) {
     this._stack[this.size()] = element;
+    this._n++;
   }
 
   pop() {
@@ -25,7 +30,19 @@ class Stack {
     }
 
     let result = this._stack[this.size() - 1];
-    delete this.storage[this.size() - 1];
+    this._n--;
     return result;
   }
+
+  contains(x) {
+    if (x && !this.isEmpty()) {
+      for (let elem of this._stack) {
+        if (elem.equals(x))
+          return true;
+      }
+    }
+    return false;
+  }
 }
+
+module.exports = Stack;
