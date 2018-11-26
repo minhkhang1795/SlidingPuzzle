@@ -1,3 +1,5 @@
+let PriorityQueue = require('./datastructure/PriorityQueue');
+
 class Board {
   constructor(tiles) {
     if (tiles && tiles.constructor === Array && tiles[0].constructor === Array) {
@@ -119,39 +121,35 @@ class Board {
         }
       }
 
-    let boards = [];
+    let boards = new PriorityQueue((a, b) => a.manhattan() > b.manhattan());
 
-    let board = this._clone();
-    if (board._swap(board._tiles, i0, j0, i0 + 1, j0)) {
+    if (i0 + 1 < this._n) {
+      let board = this._clone();
+      Board._swap(board._tiles, i0, j0, i0 + 1, j0);
       boards.push(board);
     }
-
-    board = this._clone();
-    if (board._swap(board._tiles, i0, j0, i0 - 1, j0)) {
+    if (i0 - 1 >= 0) {
+      let board = this._clone();
+      Board._swap(board._tiles, i0, j0, i0 - 1, j0);
       boards.push(board);
     }
-
-    board = this._clone();
-    if (board._swap(board._tiles, i0, j0, i0, j0 + 1)) {
+    if (j0 + 1 < this._n) {
+      let board = this._clone();
+      Board._swap(board._tiles, i0, j0, i0, j0 + 1);
       boards.push(board);
     }
-
-    board = this._clone();
-    if (board._swap(board._tiles, i0, j0, i0, j0 - 1)) {
+    if (j0 - 1 >= 0) {
+      let board = this._clone();
+      Board._swap(board._tiles, i0, j0, i0, j0 - 1);
       boards.push(board);
     }
     return boards;
   }
 
-  _swap(tiles, i1, j1, i2, j2) {
-    if (i2 < 0 || i2 >= this._n || j2 < 0 || j2 >= this._n) {
-      return false;
-    }
-
+  static _swap(tiles, i1, j1, i2, j2) {
     let temp = tiles[i1][j1];
     tiles[i1][j1] = tiles[i2][j2];
     tiles[i2][j2] = temp;
-    return true;
   }
 
   _clone() {

@@ -79,8 +79,9 @@ class Solver {
       return -Math.abs(cost); // FOUND SOLUTION
     }
     let min = Number.MAX_VALUE;
-    for (let neighbor of currState.board.neighbors()) {
-      let state = new State(neighbor, currState.moves + 1, currState);
+    let neighbors = currState.board.neighbors();
+    while (!neighbors.isEmpty()) {
+      let state = new State(neighbors.pop(), currState.moves + 1, currState);
       if (!path.contains(state)) {
         path.push(state);
         let t = this._searchIDAStar(path, state.cost, bound);
