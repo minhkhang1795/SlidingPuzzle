@@ -3,11 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-  },
+  "scripts": {},
   "author": "Minh-Khang Vu",
   "license": "ISC",
   "devDependencies": {
     "jasmine": "^3.3.0"
+  },
+  "dependencies": {
+    "google-closure-library": "^20180910.0.0"
   }
 }

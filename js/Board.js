@@ -5,7 +5,6 @@ class Board {
     if (tiles && tiles.constructor === Array && tiles[0].constructor === Array) {
       this._tiles = tiles;
       this._n = tiles.length;
-      this._goal = Board._initializeGoal(this._n);
       this._manhattan = -1;
     }
   }
@@ -14,21 +13,8 @@ class Board {
     return this._n;
   }
 
-  static _initializeGoal(n) {
-    if (n === 3)
-      return [[1, 2, 3], [4, 5, 6], [7, 8, 0]];
-    else if (n === 4)
-      return [[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 0]];
-    let goal = [];
-    let value = 1;
-    for (let i = 0; i < n; i++) {
-      goal[i] = [];
-      for (let j = 0; j < n; j++) {
-        goal[i][j] = value++;
-      }
-    }
-    goal[n - 1][n - 1] = 0;
-    return goal;
+  hashCode() {
+    return this._tiles.toString();
   }
 
   printBoard() {
@@ -46,9 +32,10 @@ class Board {
   }
 
   isGoal() {
+    let count = 1;
     for (let i = 0; i < this._n; i++) {
       for (let j = 0; j < this._n; j++) {
-        if (this._tiles[i][j] !== this._goal[i][j])
+        if (this._tiles[i][j] !== count++ && (i !== this._n - 1 || j !== this._n - 1))
           return false;
       }
     }
@@ -121,7 +108,7 @@ class Board {
         }
       }
 
-    let boards = new PriorityQueue((a, b) => a.manhattan() > b.manhattan());
+    let boards = new PriorityQueue((a, b) => a.manhattan() < b.manhattan());
 
     if (i0 + 1 < this._n) {
       let board = this._clone();
