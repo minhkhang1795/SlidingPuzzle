@@ -90,11 +90,11 @@ describe("Solver", function () {
     expect(solver.minMoves).toEqual(40);
   });
 
-  it("solves 15-puzzle #4 with IDAStar", function () {
-    board = new Board([[2, 3, 1, 9], [5, 4, 7, 11], [10, 0, 14, 15], [12, 8, 6, 13]]);
-    solver = new Solver(board);
-    expect(solver.isSolvable()).toEqual(true);
-    solver.solve();
-    expect(solver.minMoves).toEqual(51);
-  });
+  // it("solves 15-puzzle #4 with IDAStar", function () {
+  //   board = new Board([[2, 3, 1, 9], [5, 4, 7, 11], [10, 0, 14, 15], [12, 8, 6, 13]]);
+  //   solver = new Solver(board);
+  //   expect(solver.isSolvable()).toEqual(true);
+  //   solver.solve();
+  //   expect(solver.minMoves).toEqual(51);
+  // });
 });

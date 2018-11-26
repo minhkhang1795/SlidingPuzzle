@@ -5,7 +5,6 @@ class Board {
     if (tiles && tiles.constructor === Array && tiles[0].constructor === Array) {
       this._tiles = tiles;
       this._n = tiles.length;
-      this._manhattan = -1;
     }
   }
 
@@ -76,9 +75,7 @@ class Board {
   }
 
   manhattan() {
-    if (this._manhattan !== -1)
-      return this._manhattan;
-    this._manhattan = 0;
+    let manhattan = 0;
     for (let i = 0; i < this._n; i++) {
       for (let j = 0; j < this._n; j++) {
         let value = this._tiles[i][j];
@@ -87,10 +84,10 @@ class Board {
         value -= 1;
         let h = Math.abs(j - value % this._n);
         let v = Math.abs(i - Math.floor(value / this._n));
-        this._manhattan += h + v;
+        manhattan += h + v;
       }
     }
-    return this._manhattan;
+    return manhattan;
   }
 
   neighbors() {
