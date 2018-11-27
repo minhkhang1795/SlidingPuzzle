@@ -1,3 +1,20 @@
+#puzzle-container {
+    height: 100%;
+    position: fixed;
+    width: 40%;
+    padding-top: 2rem;
+    background: red;
+}
+
+#info-container {
+    padding: 2rem;
+    height: 100%;
+    position: fixed;
+    right: 0;
+    width: 60%;
+    background: blanchedalmond;
+}
+
 .board-container {
     width: 360px;
     height: 360px;
@@ -20,4 +37,45 @@
     padding: 0;
     margin: 0;
     cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    transition: all .2s;
+    -webkit-transition: all .2s;
 }
+
+.md-tabs {
+    margin-left: 1rem;
+    margin-right: 1rem;
+    background-color: #2bbbad;
+    border: 0;
+    padding: .7rem;
+    box-shadow: 0 5px 11px 0 rgba(0, 0, 0, .18), 0 4px 15px 0 rgba(0, 0, 0, .15);
+    -webkit-box-shadow: 0 5px 11px 0 rgba(0, 0, 0, .18), 0 4px 15px 0 rgba(0, 0, 0, .15);
+    z-index: 1;
+    margin-bottom: -20px;
+    position: relative;
+    border-radius: .25rem;
+}
+
+.md-tabs .nav-link.active {
+    background-color: rgba(0, 0, 0, .2);
+    color: #fff;
+    transition: all 1s;
+    -webkit-transition: all 1s;
+    border-radius: .25rem;
+    -webkit-border-radius: .25rem;
+}
+
+.nav-tabs .nav-link.active {
+    border-color: #dee2e6 #dee2e6 #fff;
+}
+
+.md-tabs .nav-link {
+    color: #fff;
+    border: 0;
+}
+
+.tab-content {
+    padding: 1rem;
+}
+
