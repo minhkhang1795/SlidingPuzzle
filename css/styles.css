@@ -1,11 +1,11 @@
-#puzzle-container {
+.puzzle-container {
     height: 100%;
     position: fixed;
     width: 30%;
     padding-top: 2rem;
 }
 
-#info-container {
+.info-container {
     padding: 2rem;
     height: 100%;
     position: fixed;
@@ -13,12 +13,24 @@
     width: 70%;
 }
 
-.board-container {
+.puzzle-container .board-container {
     width: 360px;
     height: 360px;
     margin: 0 auto 0 auto;
     background-color: #33b5e5;
-    box-shadow: inset 3px 3px 3px 0px rgba(255, 255, 255, 0.15), inset -3px -3px 3px rgba(0, 0, 0, 0.25);
+    box-shadow: inset 3px 3px 3px 0 rgba(255, 255, 255, 0.15), inset -3px -3px 3px rgba(0, 0, 0, 0.25);
+}
+
+.puzzle-container .control-container {
+    max-width: 360px;
+    margin: 0 auto 0 auto;
+    display: flex;
+    justify-content: center;
+}
+
+.puzzle-container .result-container {
+    max-width: 360px;
+    margin: 2rem auto 0 auto;
 }
 
 .puzzle15 {
@@ -89,14 +101,14 @@
 }
 
 @media screen and (max-width: 1023px) and (min-width: 0px) {
-    #puzzle-container {
+    .puzzle-container {
         position: relative;
         margin: 0 auto 0 auto;
         width: auto;
         padding: 0;
     }
 
-    #info-container {
+    .info-container {
         padding: 5rem 0 5rem 0;
         margin: 0 auto 0 auto;
         width: auto;
@@ -114,11 +126,11 @@
 }
 
 @media screen and (max-width: 1365px) and (min-width: 1024px) {
-    #puzzle-container {
+    .puzzle-container {
         width: 40%;
     }
 
-    #info-container {
+    .info-container {
         width: 60%;
     }
 }

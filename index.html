@@ -14,26 +14,40 @@
 </head>
 <body>
 <section id="title" class="text-center">
-    <h2 class="h1-responsive font-weight-bold mb-3 mt-5 light-blue-text">The Fifteen Puzzle</h2>
-    <p class="lead w-responsive mx-auto mb-5">Solving the sliding puzzle using <b>A*</b> and <b>Iterative Deepening
+    <h2 class="h1-responsive font-weight-bold mb-3 mt-5 light-blue-text">The Sliding Puzzle</h2>
+    <p class="lead w-responsive mx-auto mb-5">Solving the 15-puzzle using <b>A*</b> and <b>Iterative Deepening
         A (IDA*)</b> algorithms</p>
 </section>
-<section id="puzzle-container">
+<section class="puzzle-container">
     <!-- JQuery -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <div class="board-container">
         <div class="puzzle15">
         </div>
     </div>
+    <div class="control-container">
+        <div class="btn-group mt-4" role="group" aria-label="Basic example">
+            <button type="button" class="btn btn-amber">Shuffle</button>
+            <button type="button" class="btn btn-success">Run IDA*</button>
+            <button type="button" class="btn btn-info">Run A*</button>
+        </div>
+    </div>
+    <div class="result-container">
+        <pre style="line-height: 2;"><code><kbd>A* Solution</kbd>
+Estimated moves: 10
+Actual moves:
+Total time: 12
+</code></pre>
+    </div>
     <script src="js/index.js"></script>
     <script>let puzzle15 = new Puzzle($('.puzzle15'))</script>
 </section>
 
-<section id="info-container">
+<section class="info-container">
     <ul class="nav nav-tabs md-tabs" id="myTabMD" role="tablist">
         <li class="nav-item">
             <a class="nav-link active" data-toggle="tab" href="#home-md" role="tab"
-               aria-controls="home-md" aria-selected="true">About</a>
+               aria-controls="home-md" aria-selected="true">The Puzzle</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" data-toggle="tab" href="#profile-md" role="tab"
