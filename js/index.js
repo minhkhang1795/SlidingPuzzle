@@ -8,7 +8,10 @@ class Cell {
 const LEFT = 0,
   RIGHT = 1,
   TOP = 2,
-  BOTTOM = 3;
+  BOTTOM = 3,
+  RED_COLOR = "#ff4444",
+  ORANGE_COLOR = "#ffbb33",
+  GREEN_COLOR = "#00C851"
 
 class Puzzle {
 
@@ -20,6 +23,16 @@ class Puzzle {
 
   createUIGrid() {
     let grid = [];
+
+    function getColor(i, j) {
+      if (i === 0 || j === 0)
+        return RED_COLOR;
+      else if (i === 1 || j === 1)
+        return ORANGE_COLOR;
+      else
+        return GREEN_COLOR;
+    }
+
     for (let i = 0; i < this.n; i++) {
       let row = [];
       for (let j = 0; j < this.n; j++) {
@@ -32,7 +45,8 @@ class Puzzle {
         // Create Cell UI component
         let cellElement = $("<div class='cell'>" + number + "</div>").css({
           top: 90 * i,
-          left: 90 * j
+          left: 90 * j,
+          backgroundColor: getColor(i, j)
         })[0];
         cellElement.addEventListener("click", this.onCellClicked.bind(this));
         cellElement.setAttribute("id", number);

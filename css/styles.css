@@ -1,9 +1,8 @@
 #puzzle-container {
     height: 100%;
     position: fixed;
-    width: 40%;
+    width: 30%;
     padding-top: 2rem;
-    background: red;
 }
 
 #info-container {
@@ -11,14 +10,15 @@
     height: 100%;
     position: fixed;
     right: 0;
-    width: 60%;
-    background: blanchedalmond;
+    width: 70%;
 }
 
 .board-container {
     width: 360px;
     height: 360px;
     margin: 0 auto 0 auto;
+    background-color: #33b5e5;
+    box-shadow: inset 3px 3px 3px 0px rgba(255, 255, 255, 0.15), inset -3px -3px 3px rgba(0, 0, 0, 0.25);
 }
 
 .puzzle15 {
@@ -26,7 +26,7 @@
 }
 
 .puzzle15 .cell {
-    background: blue;
+    color: #fff;
     position: absolute;
     display: block;
     width: 90px;
@@ -41,12 +41,14 @@
     -webkit-user-select: none;
     transition: all .2s;
     -webkit-transition: all .2s;
+    text-shadow: #f6f6f5 1px 1px 2px, #9c9c8b -1px -1px 2px;
+    box-shadow: inset 3px 3px 3px 0px rgba(255, 255, 255, 0.15), inset -3px -3px 3px rgba(0, 0, 0, 0.25);
 }
 
 .md-tabs {
-    margin-left: 1rem;
-    margin-right: 1rem;
-    background-color: #2bbbad;
+    margin-left: 2rem;
+    margin-right: 2rem;
+    background-color: #33b5e5;
     border: 0;
     padding: .7rem;
     box-shadow: 0 5px 11px 0 rgba(0, 0, 0, .18), 0 4px 15px 0 rgba(0, 0, 0, .15);
@@ -55,6 +57,8 @@
     margin-bottom: -20px;
     position: relative;
     border-radius: .25rem;
+    display: flex;
+    justify-content: center;
 }
 
 .md-tabs .nav-link.active {
@@ -76,6 +80,47 @@
 }
 
 .tab-content {
-    padding: 1rem;
+    padding: 2rem;
 }
+
+#myTabContentMD {
+    max-height: 500px;
+    overflow: auto;
+}
+
+@media screen and (max-width: 1023px) and (min-width: 0px) {
+    #puzzle-container {
+        position: relative;
+        margin: 0 auto 0 auto;
+        width: auto;
+        padding: 0;
+    }
+
+    #info-container {
+        padding: 5rem 0 5rem 0;
+        margin: 0 auto 0 auto;
+        width: auto;
+        position: relative;
+    }
+
+    .tab-content {
+        padding: 1rem;
+    }
+
+    .md-tabs {
+        margin-left: 1rem;
+        margin-right: 1rem;
+    }
+}
+
+@media screen and (max-width: 1365px) and (min-width: 1024px) {
+    #puzzle-container {
+        width: 40%;
+    }
+
+    #info-container {
+        width: 60%;
+    }
+}
+
 
