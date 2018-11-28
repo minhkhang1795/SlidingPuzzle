@@ -16,7 +16,7 @@
 <section id="title" class="text-center">
     <h2 class="h1-responsive font-weight-bold mb-3 mt-5 light-blue-text">The Sliding Puzzle</h2>
     <p class="lead w-responsive mx-auto mb-5">Solving the 15-puzzle using <b>A*</b> and <b>Iterative Deepening
-        A (IDA*)</b> algorithms</p>
+        A* (IDA*)</b> algorithms</p>
 </section>
 <section class="puzzle-container">
     <!-- JQuery -->
@@ -25,11 +25,13 @@
         <div class="puzzle15">
         </div>
     </div>
+    <script src="js/index.js"></script>
+    <script>let puzzle15 = new Puzzle($('.puzzle15'))</script>
     <div class="control-container">
         <div class="btn-group mt-4" role="group" aria-label="Basic example">
-            <button type="button" class="btn btn-amber">Shuffle</button>
-            <button type="button" class="btn btn-success">Run IDA*</button>
-            <button type="button" class="btn btn-info">Run A*</button>
+            <button type="button" class="btn btn-amber" onclick="puzzle15.onControlClicked('shuffle')">Shuffle</button>
+            <button type="button" class="btn btn-success" onclick="puzzle15.onControlClicked('AStar')">Run A*</button>
+            <button type="button" class="btn btn-info" onclick="puzzle15.onControlClicked('IDAStar')">Run IDA*</button>
         </div>
     </div>
     <div class="result-container">
@@ -39,8 +41,6 @@ Actual moves:
 Total time: 12
 </code></pre>
     </div>
-    <script src="js/index.js"></script>
-    <script>let puzzle15 = new Puzzle($('.puzzle15'))</script>
 </section>
 
 <section class="info-container">

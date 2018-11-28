@@ -5,13 +5,20 @@ class Cell {
   }
 }
 
-const LEFT = 0,
-  RIGHT = 1,
+const LEFT = 1,
+  RIGHT = -1,
   TOP = 2,
-  BOTTOM = 3,
+  BOTTOM = -2,
   RED_COLOR = "#ff4444",
   ORANGE_COLOR = "#ffbb33",
-  GREEN_COLOR = "#00C851"
+  GREEN_COLOR = "#00C851",
+  TRANSITION_DELAY = 200;
+
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
 class Puzzle {
 
@@ -19,6 +26,7 @@ class Puzzle {
     this.n = gridElement[0].classList.contains("puzzle15") ? 4 : 3;
     this.gridElement = gridElement;
     this.grid = this.createUIGrid();
+    this.isRunning = false;
   }
 
   createUIGrid() {
@@ -62,56 +70,152 @@ class Puzzle {
 
   onCellClicked(event) {
     let number = event.target.id;
-    this.moveIfValid(this.grid, number);
+    this.moveNumberIfValid(parseInt(number));
   }
 
-  moveIfValid(grid, number) {
-    outerloop:
-      for (let i = 0; i < this.n; i++) {
-        for (let j = 0; j < this.n; j++) {
-          const cell = grid[i][j];
-          if (parseInt(number) === cell.id) {
-            if (i !== 0 && grid[i - 1][j].id === 0) {
-              this._move(cell, i, j, LEFT);
-            } else if (i !== this.n - 1 && grid[i + 1][j].id === 0) {
-              this._move(cell, i, j, RIGHT);
-            } else if (j !== 0 && grid[i][j - 1].id === 0) {
-              this._move(cell, i, j, TOP);
-            } else if (j !== this.n - 1 && grid[i][j + 1].id === 0) {
-              this._move(cell, i, j, BOTTOM);
-            }
-            break outerloop;
-          }
+  getCellForNumber(number) {
+    for (let i = 0; i < this.n; i++) {
+      for (let j = 0; j < this.n; j++) {
+        const cell = this.grid[i][j];
+        if (number === cell.id) {
+          return {cell: cell, i: i, j: j};
         }
       }
+    }
+    return undefined;
   }
 
+  moveNumberIfValid(number) {
+    let cell = this.getCellForNumber(number);
+    if (!cell || number === 0)
+      return {success: false, defer: null};
+    let direction;
+    if (cell.i !== 0 && this.grid[cell.i - 1][cell.j].id === 0) {
+      direction = LEFT;
+    } else if (cell.i !== this.n - 1 && this.grid[cell.i + 1][cell.j].id === 0) {
+      direction = RIGHT;
+    } else if (cell.j !== 0 && this.grid[cell.i][cell.j - 1].id === 0) {
+      direction = TOP;
+    } else if (cell.j !== this.n - 1 && this.grid[cell.i][cell.j + 1].id === 0) {
+      direction = BOTTOM;
+    }
+    return this._move(cell.cell, cell.i, cell.j, direction);
+  }
+
+
   _move(cell, i, j, direction) {
-    function updateUI(i, j) {
-      cell.element.style.top = i * 90 + "px";
-      cell.element.style.left = j * 90 + "px";
+    function updateUI(x, y) {
+      let r = $.Deferred();
+
+      // do whatever you want (e.g. ajax/animations other asyc tasks)
+      cell.element.style.top = x * 90 + "px";
+      cell.element.style.left = y * 90 + "px";
+
+      setTimeout(function () {
+        // and call `resolve` on the deferred object, once you're done
+        r.resolve();
+      }, TRANSITION_DELAY);
+
+      return r;
     }
 
     switch (direction) {
       case LEFT:
         [this.grid[i][j], this.grid[i - 1][j]] = [this.grid[i - 1][j], this.grid[i][j]];
-        updateUI(i - 1, j);
-        break;
+        return {success: true, defer: updateUI(i - 1, j)};
       case RIGHT:
         [this.grid[i][j], this.grid[i + 1][j]] = [this.grid[i + 1][j], this.grid[i][j]];
-        updateUI(i + 1, j);
-        break;
+        return {success: true, defer: updateUI(i + 1, j)};
       case TOP:
         [this.grid[i][j], this.grid[i][j - 1]] = [this.grid[i][j - 1], this.grid[i][j]];
-        updateUI(i, j - 1);
-        break;
+        return {success: true, defer: updateUI(i, j - 1)};
       case BOTTOM:
         [this.grid[i][j], this.grid[i][j + 1]] = [this.grid[i][j + 1], this.grid[i][j]];
-        updateUI(i, j + 1);
+        return {success: true, defer: updateUI(i, j + 1)};
+      default:
+        return {success: false, defer: null};
+    }
+  }
+
+  /**
+   * Check if the board is busy and determine which button was clicked to perform the action
+   * @param control String: name of the control action
+   */
+  onControlClicked(control) {
+    if (this.isRunning)
+      return;
+    this.isRunning = true;
+    switch (control) {
+      case "shuffle":
+        this.shuffle();
+        break;
+      case "AStar":
+        this.runAStar();
+        break;
+      case "IDAStar":
+        this.runIDAStar();
         break;
       default:
-        break;
+        this.isRunning = false;
     }
-    console.log(this.grid);
+  }
+
+  /**
+   * Shuffle function to randomly perform 10 moves
+   * @param moves Number: number of moves
+   * @param prevDirection Number: previous moved direction
+   */
+  shuffle(moves = 10, prevDirection) {
+    if (moves <= 0) {
+      this.isRunning = false;
+      return;
+    }
+    let ctx = this;
+    let direction = getRandomInt(-2, 2);
+    let emptyCell = this.getCellForNumber(0);
+    let adjacentCell = this.getAdjacentCellWithPosition(emptyCell, direction);
+    if (adjacentCell && direction !== -prevDirection) {
+      let result = this.moveNumberIfValid(adjacentCell.id);
+      if (result.success) {
+        result.defer.done(function () {
+          ctx.shuffle(moves - 1, direction);
+        });
+      } else {
+        ctx.shuffle(moves, prevDirection);
+      }
+    } else {
+      ctx.shuffle(moves, prevDirection);
+    }
+  }
+
+  runIDAStar() {
+
+  }
+
+  runAStar() {
+
+  }
+
+  /**
+   *
+   * @param cell Object{Cell cell, Number i, Number j}: the cell we're considering
+   * @param direction Number: indicates the direction of the adjacent cell
+   * @returns Cell: the adjacent cell at direction
+   */
+  getAdjacentCellWithPosition(cell, direction) {
+    if (!cell)
+      return undefined;
+    switch (direction) {
+      case LEFT:
+        return cell.i - 1 >= 0 ? this.grid[cell.i - 1][cell.j] : undefined;
+      case RIGHT:
+        return cell.i + 1 < this.n ? this.grid[cell.i + 1][cell.j] : undefined;
+      case TOP:
+        return cell.j - 1 >= 0 ? this.grid[cell.i][cell.j - 1] : undefined;
+      case BOTTOM:
+        return cell.j + 1 < this.n ? this.grid[cell.i][cell.j + 1] : undefined;
+      default:
+        return undefined;
+    }
   }
 }
