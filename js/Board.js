@@ -1,5 +1,3 @@
-let PriorityQueue = require('./datastructure/PriorityQueue');
-
 class Board {
   constructor(tiles) {
     if (tiles && tiles.constructor === Array && tiles[0].constructor === Array) {
@@ -19,10 +17,11 @@ class Board {
   printBoard() {
     if (this._tiles) {
       for (let tile of this._tiles) {
+        let rowString = "";
         for (let cell of tile) {
-          process.stdout.write(cell + "\t");
+          rowString += cell + "\t";
         }
-        console.log("\n");
+        console.log(rowString);
       }
       console.log("====".repeat(this._n - 1) + "=");
     } else {
@@ -160,5 +159,3 @@ class Board {
     return false;
   }
 }
-
-module.exports = Board;

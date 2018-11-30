@@ -44,5 +44,3 @@ class Stack {
     return false;
   }
 }
-
-module.exports = Stack;

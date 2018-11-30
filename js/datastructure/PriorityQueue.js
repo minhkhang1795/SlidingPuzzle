@@ -1,7 +1,7 @@
-const top = 0;
-const parent = i => ((i + 1) >>> 1) - 1;
-const left = i => (i << 1) + 1;
-const right = i => (i + 1) << 1;
+const topFunc = 0;
+const parentFunc = i => ((i + 1) >>> 1) - 1;
+const leftFunc = i => (i << 1) + 1;
+const rightFunc = i => (i + 1) << 1;
 
 class PriorityQueue {
   constructor(comparator = (a, b) => a > b) {
@@ -18,7 +18,7 @@ class PriorityQueue {
   }
 
   peek() {
-    return this._heap[top];
+    return this._heap[topFunc];
   }
 
   push(...values) {
@@ -32,8 +32,8 @@ class PriorityQueue {
   pop() {
     const poppedValue = this.peek();
     const bottom = this.size() - 1;
-    if (bottom > top) {
-      this._swap(top, bottom);
+    if (bottom > topFunc) {
+      this._swap(topFunc, bottom);
     }
     this._heap.pop();
     this._siftDown();
@@ -42,7 +42,7 @@ class PriorityQueue {
 
   replace(value) {
     const replacedValue = this.peek();
-    this._heap[top] = value;
+    this._heap[topFunc] = value;
     this._siftDown();
     return replacedValue;
   }
@@ -57,23 +57,21 @@ class PriorityQueue {
 
   _siftUp() {
     let node = this.size() - 1;
-    while (node > top && this._greater(node, parent(node))) {
-      this._swap(node, parent(node));
-      node = parent(node);
+    while (node > topFunc && this._greater(node, parentFunc(node))) {
+      this._swap(node, parentFunc(node));
+      node = parentFunc(node);
     }
   }
 
   _siftDown() {
-    let node = top;
+    let node = topFunc;
     while (
-      (left(node) < this.size() && this._greater(left(node), node)) ||
-      (right(node) < this.size() && this._greater(right(node), node))
+      (leftFunc(node) < this.size() && this._greater(leftFunc(node), node)) ||
+      (rightFunc(node) < this.size() && this._greater(rightFunc(node), node))
       ) {
-      let maxChild = (right(node) < this.size() && this._greater(right(node), left(node))) ? right(node) : left(node);
+      let maxChild = (rightFunc(node) < this.size() && this._greater(rightFunc(node), leftFunc(node))) ? rightFunc(node) : leftFunc(node);
       this._swap(node, maxChild);
       node = maxChild;
     }
   }
 }
-
-module.exports = PriorityQueue;

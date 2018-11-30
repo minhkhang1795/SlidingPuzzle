@@ -1,5 +1,4 @@
-let Stack = require('./datastructure/Stack');
-let PriorityQueue = require('./datastructure/PriorityQueue');
+const MAX_TIME = 3000;
 
 class State {
   constructor(board, moves, prevState) {
@@ -22,20 +21,31 @@ class Solver {
   constructor(initBoard, solType = 1) {
     this.minMoves = -1;
     this.solutionState = new State(initBoard, 0, null);
-    this.solved = false;
     this._solType = solType;
+    this.timeInterval = null;
+    this.totalTime = -1;
+    this.startTime = new Date();
   }
 
   isSolvable() {
     return this.solutionState.board.isSolvable();
   }
 
-  solution() {
-    if (this.solved) {
+  isSolved() {
+    return this.minMoves !== -1;
+  }
+
+  timeIsUp() {
+    return new Date() - this.startTime > MAX_TIME;
+  }
+
+  solution(shouldPrint=false) {
+    if (this.isSolved()) {
       let state = this.solutionState;
       let list = [];
       while (state != null) {
-        state.board.printBoard();
+        if (shouldPrint)
+          state.board.printBoard();
         list.push(state.board);
         state = state.prev;
       }
@@ -44,20 +54,47 @@ class Solver {
   }
 
   solve() {
-    if (!this.solved && !this.isSolvable())
-      return -1;
+    if (!this.isSolvable())
+      return null;
+
+    let r = $.Deferred();
     switch (this._solType) {
-      case 0:
-        this._solveIDAStar();
-        break;
       case 1:
-        this._solveAStar();
+        this._solveAStar(r);
         break;
       default:
-        this._solveIDAStar();
+        this._solveIDAStar(r);
     }
-    this.solved = true;
-    this.solution();
+    return r;
+  }
+
+  _solveAStar(r) {
+    let ctx = this;
+    let open = new PriorityQueue((a, b) => a.cost === b.cost ? b.moves < a.moves : a.cost < b.cost);
+    let closed = new Map();
+    open.push(this.solutionState);
+    closed.set(this.solutionState.hashCode, this.solutionState.cost);
+
+    this.timeInterval = setInterval(function () {
+      if (!ctx.isSolved() && !open.isEmpty() && !ctx.timeIsUp()) {
+        let currState = open.pop();
+        if (currState.board.isGoal()) {
+          // Stop search
+          ctx._finalizeSolution(currState);
+          r.resolve();
+        }
+        let neighbors = currState.board.neighbors();
+        while (!neighbors.isEmpty()) {
+          let state = new State(neighbors.pop(), currState.moves + 1, currState);
+          if (!closed.has(state.hashCode) || closed.get(state.hashCode) > state.cost) {
+            open.push(state);
+            closed.set(state.hashCode, state.cost);
+          }
+        }
+      } else {
+        r.resolve();
+      }
+    }, 0, open, closed);
   }
 
   _solveIDAStar() {
@@ -70,7 +107,6 @@ class Solver {
       bound = this._searchIDAStar(path, pathRef, this.solutionState.cost, bound);
       console.log(bound);
     }
-    this.minMoves = this.solutionState.moves;
   }
 
   _searchIDAStar(path, pathRef, cost, bound) {
@@ -79,7 +115,7 @@ class Solver {
       return cost;
     }
     if (currState.board.isGoal()) {
-      this.solutionState = currState;
+      this._finalizeSolution(currState);
       return -Math.abs(cost); // FOUND SOLUTION
     }
     let min = Number.MAX_VALUE;
@@ -103,30 +139,11 @@ class Solver {
     return min;
   }
 
-  _solveAStar() {
-    let open = new PriorityQueue((a, b) => a.cost === b.cost ? b.moves < a.moves : a.cost < b.cost);
-    let closed = new Map();
-    open.push(this.solutionState);
-    closed.set(this.solutionState.hashCode, this.solutionState.cost);
-    while (!open.isEmpty()) {
-      let currState = open.pop();
-      if (currState.board.isGoal()) {
-        // Stop search
-        this.solutionState = currState;
-        this.minMoves = currState.moves;
-        break;
-      }
-      let neighbors = currState.board.neighbors();
-      while (!neighbors.isEmpty()) {
-        let state = new State(neighbors.pop(), currState.moves + 1, currState);
-        if (!closed.has(state.hashCode) || closed.get(state.hashCode) > state.cost) {
-          open.push(state);
-          closed.set(state.hashCode, state.cost);
-        }
-      }
-    }
+  _finalizeSolution(currState) {
+    this.solutionState = currState;
+    this.minMoves = currState.moves;
+    this.totalTime = new Date() - this.startTime;
+    clearInterval(this.timeInterval);
+    this.solution();
   }
-
 }
-
-module.exports = Solver;

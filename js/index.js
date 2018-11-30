@@ -150,10 +150,10 @@ class Puzzle {
         this.shuffle();
         break;
       case "AStar":
-        this.runAStar();
+        this.solve(1);
         break;
       case "IDAStar":
-        this.runIDAStar();
+        this.solve(0);
         break;
       default:
         this.isRunning = false;
@@ -188,13 +188,35 @@ class Puzzle {
     }
   }
 
-  runIDAStar() {
-
+  solve(type) {
+    // Generate grid[][] from puzzle
+    let grid = [];
+    for (let i = 0; i < this.n; i++) {
+      grid[i] = [];
+      for (let j = 0; j < this.n; j++) {
+        grid[i].push(this.grid[i][j].id)
+      }
+    }
+    // Create board and solver objects
+    let board = new Board(grid);
+    let solver = new Solver(board, type);
+    let result = solver.solve();
+    let ctx = this;
+    // Handle the result asynchronously
+    if (result)
+      result.done(function () {
+        solver.solution();
+        console.log(solver.totalTime+"ms");
+        if (!solver.isSolved())
+          console.log("Not found");
+        ctx.isRunning = false;
+      });
+    else {
+      alert("No solution found.");
+      this.isRunning = false;
+    }
   }
 
-  runAStar() {
-
-  }
 
   /**
    *
