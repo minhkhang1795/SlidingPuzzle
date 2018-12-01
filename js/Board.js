@@ -104,7 +104,10 @@ class Board {
         }
       }
 
-    let boards = new PriorityQueue((a, b) => a.manhattan() < b.manhattan());
+    // The implementation for IDA* in the browser is different from that in Java
+    // Because I have to switch from recursion to loops and keep track of the path
+    // using Stack, the sign flips from < to >
+    let boards = new PriorityQueue((a, b) => a.manhattan() > b.manhattan());
 
     if (i0 + 1 < this._n) {
       let board = this._clone();

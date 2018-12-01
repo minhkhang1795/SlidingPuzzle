@@ -203,6 +203,7 @@ class Puzzle {
     let result = solver.solve();
     let ctx = this;
     // Handle the result asynchronously
+    this.isRunning = true;
     if (result)
       result.done(function () {
         solver.solution();

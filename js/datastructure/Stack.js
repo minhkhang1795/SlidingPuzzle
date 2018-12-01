@@ -24,6 +24,12 @@ class Stack {
     this._n++;
   }
 
+  pushAll(elements) {
+    for (let element of elements) {
+      this.push(element);
+    }
+  }
+
   pop() {
     if (this.isEmpty()) {
       return undefined;

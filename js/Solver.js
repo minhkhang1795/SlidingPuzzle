@@ -18,7 +18,7 @@ class State {
 }
 
 class Solver {
-  constructor(initBoard, solType = 1) {
+  constructor(initBoard, solType = 0) {
     this.minMoves = -1;
     this.solutionState = new State(initBoard, 0, null);
     this._solType = solType;
@@ -39,7 +39,7 @@ class Solver {
     return new Date() - this.startTime > MAX_TIME;
   }
 
-  solution(shouldPrint=false) {
+  solution(shouldPrint = false) {
     if (this.isSolved()) {
       let state = this.solutionState;
       let list = [];
@@ -99,49 +99,54 @@ class Solver {
 
   _solveIDAStar() {
     let bound = this.solutionState.cost;
-    let path = new Stack();
-    let pathRef = new Set();
-    path.push(this.solutionState);
-    pathRef.add(this.solutionState.hashCode);
-    while (!this.solutionState.board.isGoal()) {
-      bound = this._searchIDAStar(path, pathRef, this.solutionState.cost, bound);
-      console.log(bound);
+    let ctx = this;
+    while (!this.isSolved()) {
+      bound = this._searchIDAStar(this.solutionState, bound);
+      console.log("bound ", bound);
     }
   }
 
-  _searchIDAStar(path, pathRef, cost, bound) {
-    let currState = path.peek();
-    if (cost > bound) {
-      return cost;
-    }
-    if (currState.board.isGoal()) {
-      this._finalizeSolution(currState);
-      return -Math.abs(cost); // FOUND SOLUTION
-    }
+  _searchIDAStar(root, bound) {
     let min = Number.MAX_VALUE;
-    let neighbors = currState.board.neighbors();
+    let stack = new Stack();
+    let path = new Stack();
+    let neighbors = root.board.neighbors();
+    path.push(root);
     while (!neighbors.isEmpty()) {
-      let state = new State(neighbors.pop(), currState.moves + 1, currState);
-      if (!pathRef.has(state.hashCode)) {
+      let state = new State(neighbors.pop(), root.moves + 1, root);
+      stack.push(state);
+    }
+    while (!stack.isEmpty()) {
+      let state = stack.pop();
+
+      if (!path.contains(state)) {
+        while (!state.prev.equals(path.peek())) { // Make sure that path is sequentially connected
+          path.pop();
+        }
+        if (state.board.isGoal()) {
+          this._finalizeSolution(state);
+          return state.cost; // FOUND SOLUTION
+        }
         path.push(state);
-        pathRef.add(state.hashCode);
-        let t = this._searchIDAStar(path, pathRef, state.cost, bound);
-        if (t < 0) {
-          return t; // FOUND SOLUTION
+        if (state.cost > bound) {
+          min = state.cost < min ? state.cost : min;
+        } else {
+          neighbors = state.board.neighbors();
+          while (!neighbors.isEmpty()) {
+            let temp = new State(neighbors.pop(), state.moves + 1, state);
+            if (!path.contains(temp)) {
+              stack.push(temp);
+            }
+          }
         }
-        if (t < min) {
-          min = t;
-        }
-        path.pop();
-        pathRef.delete(state.hashCode);
       }
     }
     return min;
   }
 
-  _finalizeSolution(currState) {
-    this.solutionState = currState;
-    this.minMoves = currState.moves;
+  _finalizeSolution(finalState) {
+    this.solutionState = finalState;
+    this.minMoves = finalState.moves;
     this.totalTime = new Date() - this.startTime;
     clearInterval(this.timeInterval);
     this.solution();
