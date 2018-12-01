@@ -1,4 +1,4 @@
-const MAX_TIME = 3000;
+const MAX_TIME = 60000;
 
 class State {
   constructor(board, moves, prevState) {
@@ -32,7 +32,7 @@ class Solver {
   }
 
   isSolved() {
-    return this.minMoves !== -1;
+    return this.solutionState.board.isGoal();
   }
 
   timeIsUp() {
@@ -55,7 +55,12 @@ class Solver {
 
   solve() {
     if (!this.isSolvable())
-      return null;
+      return {success: false, r: null};
+
+    if (this.isSolved()) {
+      this._finalizeSolution(this.solutionState);
+      return {success: true, r: null};
+    }
 
     let r = $.Deferred();
     switch (this._solType) {
@@ -65,7 +70,7 @@ class Solver {
       default:
         this._solveIDAStar(r);
     }
-    return r;
+    return {success: true, r: r};
   }
 
   _solveAStar(r) {
@@ -92,56 +97,60 @@ class Solver {
           }
         }
       } else {
+        clearInterval(this.timeInterval);
         r.resolve();
       }
     }, 0, open, closed);
   }
 
-  _solveIDAStar() {
+  _solveIDAStar(r) {
     let bound = this.solutionState.cost;
+    let root = this.solutionState;
     let ctx = this;
-    while (!this.isSolved()) {
-      bound = this._searchIDAStar(this.solutionState, bound);
-      console.log("bound ", bound);
-    }
-  }
-
-  _searchIDAStar(root, bound) {
-    let min = Number.MAX_VALUE;
     let stack = new Stack();
     let path = new Stack();
-    let neighbors = root.board.neighbors();
-    path.push(root);
-    while (!neighbors.isEmpty()) {
-      let state = new State(neighbors.pop(), root.moves + 1, root);
-      stack.push(state);
-    }
-    while (!stack.isEmpty()) {
-      let state = stack.pop();
-
-      if (!path.contains(state)) {
-        while (!state.prev.equals(path.peek())) { // Make sure that path is sequentially connected
-          path.pop();
+    let min = [];
+    this.timeInterval = setInterval(function () {
+      if (ctx.timeIsUp() || ctx.isSolved()) {
+        clearInterval(this.timeInterval);
+        r.resolve();
+      } else if (!stack || stack.isEmpty()) {
+        stack = new Stack();
+        path = new Stack();
+        bound = min.length === 0 ? root.cost : min[0];
+        min[0] = Number.MAX_VALUE;
+        path.push(root);
+        let neighbors = root.board.neighbors();
+        while (!neighbors.isEmpty()) {
+          let state = new State(neighbors.pop(), root.moves + 1, root);
+          stack.push(state);
         }
-        if (state.board.isGoal()) {
-          this._finalizeSolution(state);
-          return state.cost; // FOUND SOLUTION
-        }
-        path.push(state);
-        if (state.cost > bound) {
-          min = state.cost < min ? state.cost : min;
-        } else {
-          neighbors = state.board.neighbors();
-          while (!neighbors.isEmpty()) {
-            let temp = new State(neighbors.pop(), state.moves + 1, state);
-            if (!path.contains(temp)) {
-              stack.push(temp);
+      } else {
+        let state = stack.pop();
+        if (!path.contains(state)) {
+          while (!state.prev.equals(path.peek())) { // Make sure that path is sequentially connected
+            path.pop();
+          }
+          if (state.board.isGoal()) {
+            ctx._finalizeSolution(state);
+            r.resolve(); // FOUND SOLUTION
+            return;
+          }
+          path.push(state);
+          if (state.cost > bound) {
+            min[0] = state.cost < min[0] ? state.cost : min[0];
+          } else {
+            let neighbors = state.board.neighbors();
+            while (!neighbors.isEmpty()) {
+              let temp = new State(neighbors.pop(), state.moves + 1, state);
+              if (!path.contains(temp)) {
+                stack.push(temp);
+              }
             }
           }
         }
       }
-    }
-    return min;
+    }, 0, root, stack, path, bound, min);
   }
 
   _finalizeSolution(finalState) {

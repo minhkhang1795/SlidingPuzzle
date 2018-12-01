@@ -69,6 +69,8 @@ class Puzzle {
   }
 
   onCellClicked(event) {
+    if (this.isRunning)
+      return;
     let number = event.target.id;
     this.moveNumberIfValid(parseInt(number));
   }
@@ -203,17 +205,24 @@ class Puzzle {
     let result = solver.solve();
     let ctx = this;
     // Handle the result asynchronously
-    this.isRunning = true;
-    if (result)
-      result.done(function () {
-        solver.solution();
-        console.log(solver.totalTime+"ms");
-        if (!solver.isSolved())
-          console.log("Not found");
+    if (result.success) {
+      if (result.r) {
+        result.r.done(function () {
+          if (solver.isSolved()) {
+            console.log("Time: " + solver.totalTime + " ms");
+            console.log("Total moves: " + solver.minMoves);
+          } else {
+            console.log("Time limit exceeded.");
+          }
+          ctx.isRunning = false;
+        });
+      } else {
+        console.log("Time: " + solver.totalTime + " ms");
+        console.log("Total moves: " + solver.minMoves);
         ctx.isRunning = false;
-      });
-    else {
-      alert("No solution found.");
+      }
+    } else {
+      alert("Solution not found.");
       this.isRunning = false;
     }
   }
