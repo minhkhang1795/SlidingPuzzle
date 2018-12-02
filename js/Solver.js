@@ -1,4 +1,4 @@
-const MAX_TIME = 0;
+const MAX_TIME = 60000;
 
 class State {
   constructor(board, moves, prevState) {
