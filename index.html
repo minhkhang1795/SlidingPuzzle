@@ -22,8 +22,8 @@
     <!-- JQuery -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <div class="board-container">
-        <div class="puzzle15">
-        </div>
+        <div class="puzzle15"></div>
+        <div class="mask waves-effect waves-light rgba-white-slight" id="puzzle-mask"></div>
     </div>
     <script src="js/index.js"></script>
     <script src="js/datastructure/Stack.js"></script>
@@ -33,9 +33,9 @@
     <script>let puzzle15 = new Puzzle($('.puzzle15'))</script>
     <div class="control-container">
         <div class="btn-group mt-4" role="group" aria-label="Basic example">
-            <button type="button" class="btn btn-amber" onclick="puzzle15.onControlClicked('shuffle')">Shuffle</button>
-            <button type="button" class="btn btn-success" onclick="puzzle15.onControlClicked('AStar')">Run A*</button>
-            <button type="button" class="btn btn-info" onclick="puzzle15.onControlClicked('IDAStar')">Run IDA*</button>
+            <button id="shuffleBtn" type="button" class="btn btn-amber" onclick="puzzle15.onControlClicked('shuffle')">Shuffle</button>
+            <button id="ABtn" type="button" class="btn btn-success" onclick="puzzle15.onControlClicked('AStar')">Run A*</button>
+            <button id="IDABtn" type="button" class="btn btn-info" onclick="puzzle15.onControlClicked('IDAStar')">Run IDA*</button>
         </div>
     </div>
     <div class="result-container">

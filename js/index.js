@@ -146,7 +146,7 @@ class Puzzle {
   onControlClicked(control) {
     if (this.isRunning)
       return;
-    this.isRunning = true;
+    this._setIsRunning(true);
     switch (control) {
       case "shuffle":
         this.shuffle();
@@ -158,8 +158,16 @@ class Puzzle {
         this.solve(0);
         break;
       default:
-        this.isRunning = false;
+        this._setIsRunning(false);
     }
+  }
+
+  _setIsRunning(bool) {
+    $("#puzzle-mask").css('display', bool ? 'block' : 'none');
+    $("#shuffleBtn")[0].disabled = bool;
+    $("#ABtn")[0].disabled = bool;
+    $("#IDABtn")[0].disabled = bool;
+    this.isRunning = bool;
   }
 
   /**
@@ -169,7 +177,7 @@ class Puzzle {
    */
   shuffle(moves = 10, prevDirection) {
     if (moves <= 0) {
-      this.isRunning = false;
+      this._setIsRunning(false);
       return;
     }
     let ctx = this;
@@ -213,16 +221,16 @@ class Puzzle {
             solver.consoleLog();
           } else {
             console.log("Time limit exceeded.");
-            ctx.isRunning = false;
+            ctx._setIsRunning(false);
           }
         });
       } else {
         solver.consoleLog();
-        ctx.isRunning = false;
+        this._setIsRunning(false);
       }
     } else {
       console.log("Solution not found.");
-      this.isRunning = false;
+      this._setIsRunning(false);
     }
   }
 
@@ -251,10 +259,10 @@ class Puzzle {
           ctx._solveWithResult(steps.slice(0, steps.length - 1));
         });
       } else {
-        this.isRunning = false;
+        this._setIsRunning(false);
       }
     } else {
-      this.isRunning = false;
+      this._setIsRunning(false);
     }
   }
 
