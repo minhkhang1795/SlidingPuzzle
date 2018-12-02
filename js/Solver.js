@@ -1,4 +1,4 @@
-const MAX_TIME = 60000;
+const MAX_TIME = 0;
 
 class State {
   constructor(board, moves, prevState) {
@@ -19,7 +19,7 @@ class State {
 
 class Solver {
   constructor(initBoard, solType = 0) {
-    this.minMoves = -1;
+    this.minMoves = "?";
     this.solutionState = new State(initBoard, 0, null);
     this.solType = solType;
     this.timeInterval = null;
@@ -163,8 +163,12 @@ class Solver {
   }
 
   consoleLog() {
-    console.log(this.solType === 1 ? "A* Solution" : "IDA* Solution");
-    console.log("Time: " + this.totalTime + " ms");
-    console.log("Total moves: " + this.minMoves);
+    if (this.isSolved()) {
+      console.log(this.solType === 1 ? "A* Solution" : "IDA* Solution");
+      console.log("Time: " + this.totalTime + " ms");
+      console.log("Total moves: " + this.minMoves);
+    } else {
+      console.log("Solution not found.");
+    }
   }
 }

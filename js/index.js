@@ -220,7 +220,7 @@ class Puzzle {
             ctx._updateInfo(solver);
             ctx._solveWithResult(solver.solution());
           } else {
-            console.log("Time limit exceeded.");
+            ctx._updateInfo(solver);
             ctx._setIsRunning(false);
           }
         });
@@ -230,6 +230,7 @@ class Puzzle {
       }
     } else {
       console.log("Solution not found.");
+      alert("You messed up with the board. So sorry, no solution for you!");
       this._setIsRunning(false);
     }
   }
@@ -291,9 +292,9 @@ class Puzzle {
 
   _updateInfo(solver) {
     $("#infoText").html("<kbd>" + (solver.solType === 0 ? "IDA*" : "A*") + " Solution</kbd>\n" +
-      "Estimated moves: " + solver.minMoves + "\n" +
-      "Actual moves: " + solver.estMoves + "\n" +
-      "Total time: " + solver.totalTime + "ms");
+      "Estimated moves: " + solver.estMoves + "\n" +
+      "Actual moves: " + solver.minMoves + "\n" +
+      "Total time: " + (solver.isSolved() ? (solver.totalTime + "ms") : "TIME LIMIT EXCEEDED"));
     solver.consoleLog();
   }
 }
