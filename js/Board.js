@@ -1,7 +1,7 @@
 class Board {
   constructor(tiles) {
     if (tiles && tiles.constructor === Array && tiles[0].constructor === Array) {
-      this._tiles = tiles;
+      this.tiles = tiles;
       this._n = tiles.length;
     }
   }
@@ -11,12 +11,12 @@ class Board {
   }
 
   hashCode() {
-    return this._tiles.toString();
+    return this.tiles.toString();
   }
 
   printBoard() {
-    if (this._tiles) {
-      for (let tile of this._tiles) {
+    if (this.tiles) {
+      for (let tile of this.tiles) {
         let rowString = "";
         for (let cell of tile) {
           rowString += cell + "\t";
@@ -33,7 +33,7 @@ class Board {
     let count = 1;
     for (let i = 0; i < this._n; i++) {
       for (let j = 0; j < this._n; j++) {
-        if (this._tiles[i][j] !== count++ && (i !== this._n - 1 || j !== this._n - 1))
+        if (this.tiles[i][j] !== count++ && (i !== this._n - 1 || j !== this._n - 1))
           return false;
       }
     }
@@ -46,7 +46,7 @@ class Board {
     let posFromBottom = 0; // position from bottom of the empty cell (a.k.a 0)
 
     for (let i = 0; i < this._n; i++) {
-      let tile = this._tiles[i];
+      let tile = this.tiles[i];
       for (let value of tile) {
         if (value !== 0) {
           if (refs[value - 1]) // Duplicate check
@@ -77,7 +77,7 @@ class Board {
     let manhattan = 0;
     for (let i = 0; i < this._n; i++) {
       for (let j = 0; j < this._n; j++) {
-        let value = this._tiles[i][j];
+        let value = this.tiles[i][j];
         if (value === 0)
           continue;
         value -= 1;
@@ -96,7 +96,7 @@ class Board {
     outerloop:
       for (let i = 0; i < this._n; i++) {
         for (let j = 0; j < this._n; j++) {
-          if (this._tiles[i][j] === 0) {
+          if (this.tiles[i][j] === 0) {
             i0 = i;
             j0 = j;
             break outerloop;
@@ -111,22 +111,22 @@ class Board {
 
     if (i0 + 1 < this._n) {
       let board = this._clone();
-      Board._swap(board._tiles, i0, j0, i0 + 1, j0);
+      Board._swap(board.tiles, i0, j0, i0 + 1, j0);
       boards.push(board);
     }
     if (i0 - 1 >= 0) {
       let board = this._clone();
-      Board._swap(board._tiles, i0, j0, i0 - 1, j0);
+      Board._swap(board.tiles, i0, j0, i0 - 1, j0);
       boards.push(board);
     }
     if (j0 + 1 < this._n) {
       let board = this._clone();
-      Board._swap(board._tiles, i0, j0, i0, j0 + 1);
+      Board._swap(board.tiles, i0, j0, i0, j0 + 1);
       boards.push(board);
     }
     if (j0 - 1 >= 0) {
       let board = this._clone();
-      Board._swap(board._tiles, i0, j0, i0, j0 - 1);
+      Board._swap(board.tiles, i0, j0, i0, j0 - 1);
       boards.push(board);
     }
     return boards;
@@ -143,7 +143,7 @@ class Board {
     for (let i = 0; i < this._n; i++) {
       r[i] = [];
       for (let j = 0; j < this._n; j++) {
-        r[i][j] = this._tiles[i][j];
+        r[i][j] = this.tiles[i][j];
       }
     }
     return new Board(r);
@@ -154,7 +154,7 @@ class Board {
       if (x.size() !== this.size()) return false;
       for (let i = 0; i < this._n; i++) {
         for (let j = 0; j < this._n; j++) {
-          if (x._tiles[i][j] !== this._tiles[i][j]) return false;
+          if (x.tiles[i][j] !== this.tiles[i][j]) return false;
         }
       }
       return true;

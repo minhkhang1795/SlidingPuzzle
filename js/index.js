@@ -209,24 +209,54 @@ class Puzzle {
       if (result.r) {
         result.r.done(function () {
           if (solver.isSolved()) {
-            console.log("Time: " + solver.totalTime + " ms");
-            console.log("Total moves: " + solver.minMoves);
+            ctx._solveWithResult(solver.solution());
+            solver.consoleLog();
           } else {
             console.log("Time limit exceeded.");
+            ctx.isRunning = false;
           }
-          ctx.isRunning = false;
         });
       } else {
-        console.log("Time: " + solver.totalTime + " ms");
-        console.log("Total moves: " + solver.minMoves);
+        solver.consoleLog();
         ctx.isRunning = false;
       }
     } else {
-      alert("Solution not found.");
+      console.log("Solution not found.");
       this.isRunning = false;
     }
   }
 
+  _solveWithResult(steps) {
+    function moveFrom(currStep, nextStep, ctx) {
+      let number = -1;
+      for (let i = 0; i < currStep.tiles.length; i++) {
+        for (let j = 0; j < currStep.tiles.length; j++) {
+          let diff = currStep.tiles[i][j] - nextStep.tiles[i][j];
+          if (diff !== 0) {
+            number = Math.abs(diff);
+            break;
+          }
+        }
+      }
+      return ctx.moveNumberIfValid(number);
+    }
+
+    let ctx = this;
+    if (steps && steps.length > 1) {
+      let currStep = steps[steps.length - 1];
+      let nextStep = steps[steps.length - 2];
+      let result = moveFrom(currStep, nextStep, ctx);
+      if (result && result.success) {
+        result.defer.done(function () {
+          ctx._solveWithResult(steps.slice(0, steps.length - 1));
+        });
+      } else {
+        this.isRunning = false;
+      }
+    } else {
+      this.isRunning = false;
+    }
+  }
 
   /**
    *

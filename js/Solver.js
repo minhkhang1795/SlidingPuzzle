@@ -21,7 +21,7 @@ class Solver {
   constructor(initBoard, solType = 0) {
     this.minMoves = -1;
     this.solutionState = new State(initBoard, 0, null);
-    this._solType = solType;
+    this.solType = solType;
     this.timeInterval = null;
     this.totalTime = -1;
     this.startTime = new Date();
@@ -63,7 +63,7 @@ class Solver {
     }
 
     let r = $.Deferred();
-    switch (this._solType) {
+    switch (this.solType) {
       case 1:
         this._solveAStar(r);
         break;
@@ -159,5 +159,11 @@ class Solver {
     this.totalTime = new Date() - this.startTime;
     clearInterval(this.timeInterval);
     this.solution();
+  }
+
+  consoleLog() {
+    console.log(this.solType === 1 ? "A* Solution" : "IDA* Solution");
+    console.log("Time: " + this.totalTime + " ms");
+    console.log("Total moves: " + this.minMoves);
   }
 }
