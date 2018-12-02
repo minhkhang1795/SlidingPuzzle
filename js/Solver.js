@@ -25,6 +25,7 @@ class Solver {
     this.timeInterval = null;
     this.totalTime = -1;
     this.startTime = new Date();
+    this.estMoves = initBoard.manhattan();
   }
 
   isSolvable() {

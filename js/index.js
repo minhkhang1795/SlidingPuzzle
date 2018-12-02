@@ -217,15 +217,15 @@ class Puzzle {
       if (result.r) {
         result.r.done(function () {
           if (solver.isSolved()) {
+            ctx._updateInfo(solver);
             ctx._solveWithResult(solver.solution());
-            solver.consoleLog();
           } else {
             console.log("Time limit exceeded.");
             ctx._setIsRunning(false);
           }
         });
       } else {
-        solver.consoleLog();
+        ctx._updateInfo(solver);
         this._setIsRunning(false);
       }
     } else {
@@ -287,5 +287,13 @@ class Puzzle {
       default:
         return undefined;
     }
+  }
+
+  _updateInfo(solver) {
+    $("#infoText").html("<kbd>" + (solver.solType === 0 ? "IDA*" : "A*") + " Solution</kbd>\n" +
+      "Estimated moves: " + solver.minMoves + "\n" +
+      "Actual moves: " + solver.estMoves + "\n" +
+      "Total time: " + solver.totalTime + "ms");
+    solver.consoleLog();
   }
 }
