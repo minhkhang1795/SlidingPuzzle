@@ -36,7 +36,7 @@
 .puzzle-container .board-container .mask {
     width: 100%;
     height: 100%;
-    display: none;
+    display: block;
     background-color: rgba(246, 246, 245, 0.39);
 }
 
@@ -105,6 +105,18 @@
 #myTabContentMD {
     max-height: 500px;
     overflow: auto;
+}
+
+@media screen and (max-width: 379px) and (min-width: 0px) {
+    .puzzle-container .result-container {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .puzzle-container .control-container .btn-group {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
 }
 
 @media screen and (max-width: 1023px) and (min-width: 0px) {
