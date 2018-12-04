@@ -33,9 +33,15 @@
     <script>let puzzle15 = new Puzzle($('.puzzle15'))</script>
     <div class="control-container">
         <div class="btn-group mt-4" role="group" aria-label="Basic example">
-            <button id="shuffleBtn" type="button" class="btn btn-amber" onclick="puzzle15.onControlClicked('shuffle')">Shuffle</button>
-            <button id="ABtn" type="button" class="btn btn-success" onclick="puzzle15.onControlClicked('AStar')">Run A*</button>
-            <button id="IDABtn" type="button" class="btn btn-info" onclick="puzzle15.onControlClicked('IDAStar')">Run IDA*</button>
+            <button id="shuffleBtn" type="button" class="btn btn-amber" onclick="puzzle15.onControlClicked('shuffle')">
+                Shuffle
+            </button>
+            <button id="ABtn" type="button" class="btn btn-success" onclick="puzzle15.onControlClicked('AStar')">Run
+                A*
+            </button>
+            <button id="IDABtn" type="button" class="btn btn-info" onclick="puzzle15.onControlClicked('IDAStar')">Run
+                IDA*
+            </button>
         </div>
     </div>
     <div class="result-container">
@@ -64,12 +70,41 @@
     </ul>
     <div class="tab-content card pt-5" id="myTabContentMD">
         <div class="tab-pane fade show active" id="home-md" role="tabpanel" aria-labelledby="home-tab-md">
-            <!-- Section heading -->
-            <h2 class="h1-responsive font-weight-bold text-center my-5 light-blue-text">Section title</h2>
-            <!-- Section description -->
-            <p class="text-center dark-grey-text w-responsive mx-auto mb-5">Duis aute irure dolor in reprehenderit in
-                voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                proident, sunt in culpa qui officia deserunt mollit id laborum.</p>
+            <h3 class="h3-responsive font-weight-bold my-3 light-blue-text">Overview</h3>
+            <p class="dark-grey-text mb-5">The 15-puzzle is a sliding puzzle that consists of 15 numbered square tiles
+                in random order in a 4 by 4 frame. The goal is to re-arrange the tiles into their correct orders. There
+                exists other <i>n</i>-puzzles such as the smaller 8-puzzle or the larger 24-puzzle. The <i>n</i>-puzzle
+                is a
+                classical problem that asks whether a specific puzzle is solvable, and if it’s solvable, how
+                many sliding moves it would take to re-arrange the tiles. For larger sizes of the n-puzzle,
+                the question of finding the shortest solution to re-arrange the tiles is NP-hard.</p>
+
+            <h3 class="h3-responsive font-weight-bold my-3 light-blue-text">Solvable Conditions</h3>
+            <p class="dark-grey-text mb-5">Different <i>n</i>-puzzles have different ways to determine whether a puzzle
+                is
+                solvable. The
+                conditions for which a 15-puzzle is solvable are:</p>
+
+            <h3 class="h3-responsive font-weight-bold my-3 light-blue-text">Shortest Solution</h3>
+            <p class="dark-grey-text">This interactive webpage applies two methods to solve the 15-puzzle: <strong>A*</strong>
+                and
+                <strong>Iterative deepening A* (IDA*)</strong>. You can play around with the puzzle on the left or click
+                on the shuffle
+                button to generate 10 random moves. The other two buttons will try to solve the puzzle
+                using A* and IDA* under 1-minute threshold. That is, if the solving time exceeds 1 minute,
+                the program will stop and return no result. This limitation is due to the fact that the solving
+                engine was built on the client side (i.e. in your favorite web browser). Therefore, the 1-minute
+                threshold would make sure that your web browser would not hang, and you would still
+                able to browse other stuff while the solver is running. Another thing to note is that the total
+                runtime of both algorithms is subjected to the activity of your web browser. It might run
+                slower if there are more active tabs or interactions in the browser. The runtime is also slow
+                due to the fact that the code was implemented asynchronously to make sure it would not
+                block the main thread (or else you wouldn’t be able to click on other links or tabs). As a
+                result, a lot of tweaks to the origin code, which includes a complex recursion and some
+                loops, were needed to make it work in the browser.
+            </p>
+            <p class="dark-grey-text mb-5">Detailed explanations with the original Java implementations and performance analysis are
+                included in the next tabs.</p>
         </div>
         <div class="tab-pane fade" id="profile-md" role="tabpanel" aria-labelledby="profile-tab-md">
             <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1
