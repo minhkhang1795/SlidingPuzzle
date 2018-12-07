@@ -297,4 +297,62 @@ class Puzzle {
       "Total time: " + (solver.isSolved() ? (solver.totalTime + "ms") : "TIME LIMIT EXCEEDED"));
     solver.consoleLog();
   }
+
+  /**
+   * Use this function to generate board
+   * with a specific estimated moves
+   * @param moves
+   * @param prevDirection
+   */
+  generateBoard(moves = 10, prevDirection) {
+    // Generate grid[][] from puzzle
+    let grid = [];
+    for (let i = 0; i < this.n; i++) {
+      grid[i] = [];
+      for (let j = 0; j < this.n; j++) {
+        grid[i].push(this.grid[i][j].id)
+      }
+    }
+    // Create board and solver objects
+    let board = new Board(grid);
+    console.log(board.manhattan());
+    if (board.manhattan() >= moves || !this.isRunning) {
+      this._setIsRunning(false);
+      return;
+    }
+    let ctx = this;
+    let direction = getRandomInt(-2, 2);
+    let emptyCell = this.getCellForNumber(0);
+    let adjacentCell = this.getAdjacentCellWithPosition(emptyCell, direction);
+    if (adjacentCell && direction !== -prevDirection) {
+      let result = this.moveNumberIfValid(adjacentCell.id);
+      if (result.success) {
+        result.defer.done(function () {
+          ctx.generateBoard(moves, direction);
+        });
+      } else {
+        ctx.generateBoard(moves, prevDirection);
+      }
+    } else {
+      ctx.generateBoard(moves, prevDirection);
+    }
+  }
+
+  printBoard() {
+    // Generate grid[][] from puzzle
+    let grid = "{";
+    for (let i = 0; i < this.n; i++) {
+      grid += "{";
+      for (let j = 0; j < this.n; j++) {
+        grid += this.grid[i][j].id;
+        if (j !== this.n - 1)
+          grid += ", ";
+      }
+      grid += "}";
+      if (i !== this.n - 1)
+        grid += ", ";
+    }
+    grid += "}";
+    console.log(grid);
+  }
 }
