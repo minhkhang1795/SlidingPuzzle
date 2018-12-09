@@ -11,12 +11,13 @@
     <!-- Material Design Bootstrap -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.14/css/mdb.min.css" rel="stylesheet">
     <link href="css/styles.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
 </head>
 <body>
 <section id="title" class="text-center">
     <h2 class="h1-responsive font-weight-bold mb-3 mt-5 light-blue-text">The Sliding Puzzle</h2>
-    <p class="lead w-responsive mx-auto mb-5">Solving the 15-puzzle using <b>A*</b> and <b>Iterative Deepening
-        A* (IDA*)</b> algorithms</p>
+    <p class="lead w-responsive mx-auto mb-5">Solving the 15-puzzle using <strong>A*</strong> and <strong>Iterative Deepening
+        A* (IDA*)</strong> algorithms</p>
 </section>
 <section class="puzzle-container">
     <!-- JQuery -->
@@ -52,46 +53,57 @@
 <section class="info-container">
     <ul class="nav nav-tabs md-tabs" id="myTabMD" role="tablist">
         <li class="nav-item">
-            <a class="nav-link active" data-toggle="tab" href="#home-md" role="tab"
+            <a class="nav-link active" data-toggle="tab" href="#about" role="tab"
                aria-controls="home-md" aria-selected="true">The Puzzle</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#profile-md" role="tab"
+            <a class="nav-link" data-toggle="tab" href="#a-star" role="tab"
                aria-controls="profile-md" aria-selected="false">A* Algorithm</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#contact-md" role="tab"
+            <a class="nav-link" data-toggle="tab" href="#ida-star" role="tab"
                aria-controls="contact-md" aria-selected="false">IDA* Algorithm</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#contact-md" role="tab"
+            <a class="nav-link" data-toggle="tab" href="#comparison" role="tab"
                aria-controls="contact-md" aria-selected="false">Comparisons</a>
         </li>
     </ul>
     <div class="tab-content card pt-5" id="myTabContentMD">
-        <div class="tab-pane fade show active" id="home-md" role="tabpanel" aria-labelledby="home-tab-md">
+        <div class="tab-pane fade show active" id="about" role="tabpanel">
             <h3 class="h3-responsive font-weight-bold my-3 light-blue-text">Overview</h3>
             <p class="dark-grey-text mb-5">The 15-puzzle is a sliding puzzle that consists of 15 numbered square tiles
                 in random order in a 4 by 4 frame. The goal is to re-arrange the tiles into their correct orders. There
                 exists other <i>n</i>-puzzles such as the smaller 8-puzzle or the larger 24-puzzle. The <i>n</i>-puzzle
-                is a
-                classical problem that asks whether a specific puzzle is solvable, and if it’s solvable, how
-                many sliding moves it would take to re-arrange the tiles. For larger sizes of the n-puzzle,
-                the question of finding the shortest solution to re-arrange the tiles is NP-hard.</p>
+                is a classical problem that asks whether a specific puzzle is solvable, and if it’s solvable, how
+                many sliding moves it would take to re-arrange the tiles. For larger sizes of the <i>n</i>-puzzle,
+                the question of finding the shortest solution to re-arrange the tiles is <strong>NP-hard</strong>.</p>
 
             <h3 class="h3-responsive font-weight-bold my-3 light-blue-text">Solvable Conditions</h3>
-            <p class="dark-grey-text mb-5">Different <i>n</i>-puzzles have different ways to determine whether a puzzle
-                is
-                solvable. The
-                conditions for which a 15-puzzle is solvable are:</p>
-
+            <p class="dark-grey-text">Different <i>n</i>-puzzles have different ways to determine whether a puzzle
+                is solvable. <a href="https://www.geeksforgeeks.org/check-instance-15-puzzle-solvable/" target="_blank">The
+                    conditions for which a 15-puzzle</a> is solvable are:</p>
+            <ul class="mb-5">
+                <li>The blank is on an even row counting from the bottom (second-last, fourth-last, etc.), and the
+                    number of inversions is odd.
+                </li>
+                <li>The blank is on an odd row counting from the bottom (last, third-last, fifth-last, etc.),
+                    and the number of inversions is even.
+                </li>
+                <li><strong>Number of inversions:</strong> If the tiles are written out in a single row instead of being
+                    spread in 4 rows, a pair of tiles <i>(a, b)</i> forms an inversion if <i>a</i> appears before
+                    <i>b</i> but <i>a &gt;
+                        b</i>.
+                </li>
+            </ul>
             <h3 class="h3-responsive font-weight-bold my-3 light-blue-text">Shortest Solution</h3>
-            <p class="dark-grey-text">This interactive webpage applies two methods to solve the 15-puzzle: <strong>A*</strong>
+            <p class="dark-grey-text">This interactive webpage applies two methods to solve the 15-puzzle:
+                <strong>A*</strong>
                 and
                 <strong>Iterative deepening A* (IDA*)</strong>. You can play around with the puzzle on the left or click
                 on the shuffle
                 button to generate 10 random moves. The other two buttons will try to solve the puzzle
-                using A* and IDA* under 1-minute threshold. That is, if the solving time exceeds 1 minute,
+                using A* and IDA* under a 1-minute threshold. That is, if the solving time exceeds 1 minute,
                 the program will stop and return no result. This limitation is due to the fact that the solving
                 engine was built on the client side (i.e. in your favorite web browser). Therefore, the 1-minute
                 threshold would make sure that your web browser would not hang, and you would still
@@ -100,77 +112,113 @@
                 slower if there are more active tabs or interactions in the browser. The runtime is also slow
                 due to the fact that the code was implemented asynchronously to make sure it would not
                 block the main thread (or else you wouldn’t be able to click on other links or tabs). As a
-                result, a lot of tweaks to the origin code, which includes a complex recursion and some
+                result, a lot of tweaks to the original code, which includes a complex recursion and some
                 loops, were needed to make it work in the browser.
             </p>
-            <p class="dark-grey-text mb-5">Detailed explanations with the original Java implementations and performance analysis are
-                included in the next tabs.</p>
+            <p class="dark-grey-text mb-5">Detailed explanations with the original Java implementations and performance
+                analysis are included in the next tabs.</p>
         </div>
-        <div class="tab-pane fade" id="profile-md" role="tabpanel" aria-labelledby="profile-tab-md">
-            <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1
-                labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft
-                beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad
-                vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar
-                helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes
-                anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party
-                scenester stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.
-                Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1
-                labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft
-                beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad
-                vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar
-                helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes
-                anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party
-                scenester stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.
-                Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1
-                labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft
-                beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad
-                vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar
-                helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes
-                anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party
-                scenester stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.
-                Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1
-                labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft
-                beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad
-                vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar
-                helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes
-                anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party
-                scenester stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.
-                Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1
-                labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft
-                beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad
-                vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar
-                helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes
-                anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party
-                scenester stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.
-                Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1
-                labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft
-                beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad
-                vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar
-                helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes
-                anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party
-                scenester stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.
-                Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1
-                labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft
-                beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad
-                vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar
-                helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes
-                anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party
-                scenester stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.
-                Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1
-                labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft
-                beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad
-                vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar
-                helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes
-                anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party
-                scenester stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.</p>
+        <div class="tab-pane fade" id="a-star" role="tabpanel">
+            <p></p>
         </div>
-        <div class="tab-pane fade" id="contact-md" role="tabpanel" aria-labelledby="contact-tab-md">
-            <p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro
-                fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone
-                skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony. Leggings
-                gentrify squid 8-bit cred pitchfork. Williamsburg banh mi whatever gluten-free, carles pitchfork
-                biodiesel fixie etsy retro mlkshk vice blog. Scenester cred you probably haven't heard of them, vinyl
-                craft beer blog stumptown. Pitchfork sustainable tofu synth chambray yr.</p>
+        <div class="tab-pane fade" id="ida-star" role="tabpanel">
+            <p></p>
+        </div>
+        <div class="tab-pane fade" id="comparison" role="tabpanel">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col"><strong>#</strong></th>
+                    <th scope="col"><strong>Puzzle</strong></th>
+                    <th scope="col"><strong>Estimated</strong></th>
+                    <th scope="col"><strong>Actual</strong></th>
+                    <th scope="col"><strong>A* time</strong></th>
+                    <th scope="col"><strong>IDA* time</strong></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th scope="row">1</th>
+                    <td>{{2, 7, 4, 3}, {1, 12, 8, 6}, {0, 14, 15, 9}, {13, 5, 11, 10}}</td>
+                    <td>24</td>
+                    <td>40</td>
+                    <td class="green-text">413ms</td>
+                    <td>587ms</td>
+                </tr>
+                <tr>
+                    <th scope="row">2</th>
+                    <td>{{4, 6, 3, 0}, {1, 2, 7, 12}, {8, 5, 9, 14}, {10, 11, 13, 15}}</td>
+                    <td>25</td>
+                    <td>43</td>
+                    <td>2s 617ms</td>
+                    <td class="green-text">1s 667ms</td>
+                </tr>
+                <tr>
+                    <th scope="row">3</th>
+                    <td>{{2, 0, 12, 5}, {13, 7, 1, 3}, {14, 11, 8, 10}, {4, 6, 9, 15}}</td>
+                    <td>35</td>
+                    <td>43</td>
+                    <td class="green-text">16ms</td>
+                    <td>32ms</td>
+                </tr>
+                <tr>
+                    <th scope="row">4</th>
+                    <td>{{1, 4, 9, 3}, {6, 8, 11, 15}, {12, 2, 14, 10}, {13, 0, 7, 5}}</td>
+                    <td>30</td>
+                    <td>46</td>
+                    <td class="green-text">1s 321ms</td>
+                    <td>5s 683ms</td>
+                </tr>
+                <tr>
+                    <th scope="row">5</th>
+                    <td>{{6, 8, 0, 4}, {13, 9, 10, 14}, {15, 2, 12, 5}, {1, 3, 7, 11}}</td>
+                    <td>36</td>
+                    <td>50</td>
+                    <td class="green-text">3s 26ms</td>
+                    <td>4s 732ms</td>
+                </tr>
+                <tr>
+                    <th scope="row">6</th>
+                    <td>{{2, 3, 1, 9}, {5, 4, 7, 11}, {10, 0, 14, 15}, {12, 8, 6, 13}}</td>
+                    <td>33</td>
+                    <td>51</td>
+                    <td class="text-danger">Memory Limit Exceeded</td>
+                    <td class="green-text">1m 49s 198ms</td>
+                </tr>
+                <tr>
+                    <th scope="row">7</th>
+                    <td>{{9, 15, 12, 7}, {6, 1, 3, 4}, {5, 13, 0, 14}, {8, 11, 10, 2}}</td>
+                    <td>36</td>
+                    <td>54</td>
+                    <td class="text-danger">Memory Limit Exceeded</td>
+                    <td class="green-text">2m 43s 456ms</td>
+                </tr>
+                <tr>
+                    <th scope="row">8</th>
+                    <td>{{2, 14, 10, 7}, {11, 3, 0, 13}, {5, 9, 8, 6}, {12, 4, 15, 1}}</td>
+                    <td>41</td>
+                    <td>55</td>
+                    <td class="text-danger">Memory Limit Exceeded</td>
+                    <td class="green-text">1m 23s 90ms</td>
+                </tr>
+                <tr>
+                    <th scope="row">9</th>
+                    <td>{{1, 5, 0, 13}, {10, 3, 2, 11}, {15, 12, 14, 7}, {8, 4, 6, 9}}</td>
+                    <td>42</td>
+                    <td>56</td>
+                    <td class="text-danger">Memory Limit Exceeded</td>
+                    <td class="green-text">58s 211ms</td>
+                </tr>
+                <tr>
+                    <th scope="row">10</th>
+                    <td>{{15, 1, 10, 13}, {11, 7, 5, 6}, {14, 3, 0, 12}, {4, 2, 8, 9}}</td>
+                    <td>44</td>
+                    <td>62</td>
+                    <td class="text-danger">Memory Limit Exceeded</td>
+                    <td class="green-text">5m 34s 698ms</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </section>
