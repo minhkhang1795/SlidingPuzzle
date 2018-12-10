@@ -29,12 +29,13 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.14/css/mdb.min.css" rel="stylesheet">
     <link href="css/styles.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
-    <link href="css/prism.css" rel="stylesheet" />
+    <link href="css/prism.css" rel="stylesheet"/>
 </head>
 <body>
 <section id="title" class="text-center">
     <h2 class="h1-responsive font-weight-bold mb-3 mt-5 light-blue-text">The Sliding Puzzle</h2>
-    <p class="lead w-responsive mx-auto mb-5 px-3">Solving the 15-puzzle using <strong>A*</strong> and <strong>Iterative Deepening
+    <p class="lead w-responsive mx-auto mb-5 px-3">Solving the 15-puzzle using <strong>A*</strong> and <strong>Iterative
+        Deepening
         A* (IDA*)</strong> algorithms</p>
 </section>
 <section class="puzzle-container">
@@ -133,10 +134,50 @@
                 result, a lot of tweaks to the original code, which includes a complex recursion and some
                 loops, were needed to make it work in the browser.
             </p>
-            <p class="dark-grey-text mb-5">Detailed explanations with the original Java implementations and performance
+            <p class="dark-grey-text">Detailed explanations with the original Java implementations and performance
                 analysis are included in the next tabs.</p>
         </div>
         <div class="tab-pane fade" id="a-star" role="tabpanel">
+            <p class="dark-grey-text">The A* is an informed search algorithm, or a best first search. It uses a
+                heuristic function to estimate
+                the cost of the cheapest path and determine the next promising direction. If the heuristic function is
+                admissible, which means it never overestimates the actual cost to get to the goal, A* is guaranteed to
+                return the shortest path from start to goal. Mathematically, A* selects the path that minimizes
+            </p>
+            <img src="asset/heuristic.svg" alt="heuristic function fn = gn + hn">
+            <p class="dark-grey-text mb-5 mt-3">
+                where <i>n</i> is the next node on the path, <i>g(n)</i> is the cost of the path from start to <i>n</i>,
+                and <i>h(n)</i> is a heuristic function that estimates the cost of the cheapest path from <i>n</i> to
+                goal.
+            </p>
+            <h3 class="h3-responsive font-weight-bold my-3 light-blue-text">Complexity</h3>
+            <p class="dark-grey-text">Space and time complexities of A* depend on the heuristic function. If the
+                heuristic does not give any useful information (e.g. when heuristic is zero), then A* behaves just like
+                the <strong>BFS algorithm</strong>. The good
+                heuristic will prune away many nodes that are guaranteed not to yield an optimal solution. The most
+                obvious example of these nodes is when a next node is exactly the previous node, meaning
+                that it’s going backward.</p>
+            <p class="dark-grey-text mb-5">
+                In the worst case, the time and space complexities of A* are exponential just like <strong>BFS</strong>.
+                With the use of
+                a good heuristic function, its space and time complexity are just polynomial.
+            </p>
+            <h3 class="h3-responsive font-weight-bold my-3 light-blue-text">Optimizations</h3>
+            <p class="dark-grey-text mb-5">In my Java implementation, I used a <strong>Min-heap Priority Queue</strong>
+                to keep track of the
+                promising candidates so that the next promising candidate with the lowest heuristic score will be
+                evaluated subsequently. For those candidates that have the same heuristic scores, they will be sorted
+                descendingly by the actual moves that they already made. This second prioritization improves the
+                performance of the algorithm for more complex problems in which many nodes have the same heuristic
+                score. Besides, I also implemented a <strong>HashMap</strong> (i.e. a dictionary) to keep track of the
+                nodes that are
+                already evaluated so that we don’t have to put identical nodes into the <strong>Priority Queue</strong>
+                unless they have
+                a lower score. This would help reduce the time significantly because we can cut off duplicate nodes.
+                Furthermore, because <strong>HashMap</strong> can look for an item in <i>O(1)</i> time complexity, it’s
+                much more quickly compared to the <strong>Priority Queue</strong>, which is <i>O(n)</i> for checking if
+                an item is in the queue.</p>
+            <h3 class="h3-responsive font-weight-bold my-3 light-blue-text">Java Implementation</h3>
             <pre><code class="language-java">private void solveAStar() {
     PriorityQueue&lt;State> open = new PriorityQueue<>();
     HashMap&lt;State, Integer> closed = new HashMap<>();
@@ -166,6 +207,24 @@
 }</code></pre>
         </div>
         <div class="tab-pane fade" id="ida-star" role="tabpanel">
+            <p class="dark-grey-text mb-5">Iterative deepening A* can be viewed as a combination of <strong>BFS</strong>
+                and <strong>DFS</strong>.
+                It performs a <strong>DFS</strong> and cuts off a
+                branch when it goes down to a specific depth threshold, which initially is the heuristic cost of the
+                root. If it cannot find the goal, the depth threshold is increased strategically using the minimum
+                heuristic cost that exceeds the current threshold. Similar to A*, IDA* is guaranteed to find the optimal
+                solution if the heuristic function is admissible because it will not overestimate the depth threshold.
+            </p>
+            <h3 class="h3-responsive font-weight-bold my-3 light-blue-text">Complexity</h3>
+            <p class="dark-grey-text mb-5">In contrast to A*, IDA* only remembers all the nodes on its current path. As a result, IDA* only requires
+                a linear amount of memory <i>O(d)</i>, in which <i>d</i> is the max depth of the search tree. Regarding time
+                complexity, IDA* works similar to a brute-force tree search with a smaller constant factor. As IDA* does
+                not utilize dynamic programming (i.e. saves results), it ends up checking the same nodes many times.
+            </p>
+            <h3 class="h3-responsive font-weight-bold my-3 light-blue-text">Optimizations</h3>
+            <p class="dark-grey-text mb-5">My implementation of IDA* also takes some advantages of optimizations already discussed in A*.
+            </p>
+            <h3 class="h3-responsive font-weight-bold my-3 light-blue-text">Java Implementation</h3>
             <pre><code class="language-java">private void solveIDAStar() {
     int bound = solutionState.cost;
     Stack&lt;State> path = new Stack<>();
@@ -209,6 +268,14 @@ private int searchIDAStar(Stack&lt;State> path, HashSet&lt;State> pathRef, int f
 }</code></pre>
         </div>
         <div class="tab-pane fade" id="comparison" role="tabpanel">
+            <p>In most cases, A* will be faster than IDA* because it always looks for the most promising candidates
+                during its search while IDA* repeats checking candidates many times. However, A* will take more memory
+                usage than IDA* because it needs to store all the promising candidates for future evaluation. On the
+                other hand, IDA* only takes at most <i>O(d)</i> space in which <i>d</i> is the max depth of the search
+                tree.
+            </p>
+            <p>The table below shows the performance of A* and IDA*. Note that A* performs better for easy puzzles but
+                is unable to finish because of its huge memory usage.</p>
             <table class="table">
                 <thead>
                 <tr>
