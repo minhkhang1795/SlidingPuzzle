@@ -111,6 +111,19 @@
     overflow: auto;
 }
 
+footer {
+    position: fixed;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 1030;
+}
+
+footer.page-footer .footer-copyright {
+    background-color: #33b5e5!important;
+    color: rgba(255, 255, 255, 0.75);
+}
+
 @media screen and (max-width: 379px) and (min-width: 0px) {
     .puzzle-container .result-container {
         padding-left: 1rem;
@@ -145,6 +158,14 @@
     .md-tabs {
         margin-left: 1rem;
         margin-right: 1rem;
+    }
+
+    footer {
+        position: relative;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        z-index: 1030;
     }
 }
 
